@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use App\Handlers\ImageUploadHandler;
 
 class UsersController extends Controller
 {
@@ -40,11 +41,18 @@ class UsersController extends Controller
      * @param  App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, User $user)
+    public function update(UserRequest $request, ImageUploadHandler $uploader, User $user)
     {
-        // dd($request);
+        $data = $request->all();
+
+        if($request->avatar){
+            $result = $uploader->save($request->avatar,'avatars',$user->id,200);
+            if($result){
+                $data['avatar'] = $result['path'];
+            }
+        }
         //
-        $user->update($request->all());
+        $user->update($data);
         return redirect()->route('users.show',$user->id)->with('success','个人资料更新成功！');
     }
 
