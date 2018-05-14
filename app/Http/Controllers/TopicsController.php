@@ -17,6 +17,8 @@ class TopicsController extends Controller
 	public function index(Request $request,Topic $topic)
 	{
 		$topics = $topic->withOrder($request->order)->paginate(20);
+        $path = $request->order ? $request->getPathInfo().'?order='.$request->order : '';
+        $topics->withPath($path);
 		return view('topics.index', compact('topics'));
 	}
 
