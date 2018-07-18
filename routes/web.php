@@ -27,3 +27,5 @@ Route::get('/test',function(){
     echo md5('123456789kboxing01');
 });
 Route::resource('replies', 'RepliesController', ['only' => ['store', 'destroy']]);
+
+Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
